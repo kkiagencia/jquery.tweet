@@ -1,3 +1,8 @@
+/*
+ *    Copyright (c) 2010 Pete O'Grady 
+ *    Freely distributable under the terms of the MIT license.
+ */
+
 "use strict";
 (function ($) {
     $.fn.tweet = function (options) {
