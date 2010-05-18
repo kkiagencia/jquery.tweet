@@ -5,12 +5,12 @@
 
 "use strict";
 Date.prototype.timeAgoInWords = function (relativeDate) {
-	var delta;
+    var delta;
     relativeDate = relativeDate || new Date();
-	delta = parseInt((relativeDate.getTime() - this) / 1000, 10);
-	if (delta < 60) {
-	    return 'less than a minute ago';
-	} else if (delta < 120) {
+    delta = parseInt((relativeDate.getTime() - this) / 1000, 10);
+    if (delta < 60) {
+        return 'less than a minute ago';
+    } else if (delta < 120) {
 	    return 'about a minute ago';
 	} else if (delta < (45 * 60)) {
 	    return (parseInt(delta / 60, 10)) + ' minutes ago';
