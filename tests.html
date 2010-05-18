@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>jQuery.Tweet Tests</title>   
+        <link rel="stylesheet" type="text/css" href="qunit.css" />
+    </head>                    
+    <body>
+        <h1 id="qunit-header">jQuery.Tweet Tests</h1>
+        <h2 id="qunit-banner"></h2>
+        <h2 id="qunit-userAgent"></h2>
+        <ol id="qunit-tests"></ol>
+        <span id="tweet"></span>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script src="qunit.js"></script>
+        <script src="cannedResponse.js"></script>
+        <script src="jquery.tweet.js"></script>
+        <script>
+            $(function () {
+                test("display date ago in words - less than a minute ago", function () {
+                    var date = new Date();
+                    equal(date.timeAgoInWords(), "less than a minute ago");
+                });
+
+                test("display date ago in words - 1 day ago", function () {
+                    var referenceDate = new Date(2010, 4, 17);
+                    var date = new Date(2010, 4, 16);
+                    equal(date.timeAgoInWords(referenceDate), "1 day ago");
+                });
+
+                test("display date ago in words - 4 days ago", function () {
+                    var referenceDate = new Date(2010, 4, 14);
+                    var date = new Date(2010, 4, 10);
+                    equal(date.timeAgoInWords(referenceDate), "4 days ago");
+                });
+
+                test("display date ago in words - twitter date", function () {
+                    var referenceDate = new Date(2010, 4, 17);
+                    var date = new Date(1273678461000);
+                    equal(date.timeAgoInWords(referenceDate), "4 days ago");
+                });
+
+                test("display latest tweet", function () {
+                    var oldAjax = $.ajax;
+                    $.ajax = function (options) {
+                        options.success.call(null, CANNEDRESPONSE);
+                    };
+                    var tweetSpan = $("#tweet");
+                    tweetSpan.empty();
+                    equal(tweetSpan.text(), "");
+                    tweetSpan.tweet({"user": "peteog"});
+                    
+                    ok(tweetSpan.text().indexOf("@SPDaz yeah? Good?") != -1);
+                    $.ajax = oldAjax;
+                });
+
+                test("display nothing when data is blank", function () {
+                    var oldAjax = $.ajax;
+                    $.ajax = function (options) {
+                        options.success.call(null, []);
+                    };
+                    var tweetSpan = $("#tweet");
+                    tweetSpan.empty();
+                    equal(tweetSpan.text(), "");
+                    tweetSpan.tweet({"user": "peteog"});
+                    equal(tweetSpan.text(), "");
+                    $.ajax = oldAjax;
+                });
+            });
+        </script>
+    </body>
+</html>
+
