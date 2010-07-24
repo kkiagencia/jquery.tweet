@@ -27,21 +27,21 @@ Date.prototype.timeAgoInWords = function (relativeDate) {
 
 (function ($) {
     $.fn.tweet = function (options) {
-        var $options = $.extend({}, $.fn.tweet.defaults, options);
+        var options = $.extend({}, $.fn.tweet.defaults, options);
 
         return this.each(function () {
             var $this = $(this), $span = $("<span>");
-            $span.text($options.loadingText);
+            $span.text(options.loadingText);
             $this.append($span);
 
-            $.getJSON("http://twitter.com/statuses/user_timeline/" + $options.user + ".json?count=1&callback=?", function (data) {
+            $.getJSON("http://twitter.com/statuses/user_timeline/" + options.user + ".json?count=1&callback=?", function (data) {
                 if (data.length > 0) {
                     var regexp, tweet, date, url, dateSplit;
                     regexp = /((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/gi;                
                     tweet = data[0].text.replace(regexp, "<a href=\"$1\">$1</a>");
                     dateSplit = data[0].created_at.split(" ");
                     date = new Date(dateSplit[1] + " " + dateSplit[2] + ", " + dateSplit[5] + " " + dateSplit[3]).timeAgoInWords();
-                    url = "http://twitter.com/" + $options.user + "/statuses/" + data[0].id;
+                    url = "http://twitter.com/" + options.user + "/statuses/" + data[0].id;
                     $this.empty();
                     $this.append($('<span>' + tweet + '</span>')).append(' <a href=\"' + url + '\">' + date + '</a>');
                 } else {
